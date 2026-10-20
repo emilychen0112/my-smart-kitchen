@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#687b62">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="智慧廚房">
+<title>我的智慧廚房</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--green:#687b62;--deep:#354737;--sage:#e7ede2;--cream:#f8f6f0;--paper:#fffefa;--ink:#283128;--muted:#73796f;--line:#e5e4dc;--warn:#b86c3c;--red:#b94c45}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","PingFang TC","Noto Sans TC",sans-serif;padding-bottom:calc(82px + env(safe-area-inset-bottom))}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.top{padding:calc(18px + env(safe-area-inset-top)) 20px 18px;background:var(--green);color:white;border-radius:0 0 26px 26px}
+.eyebrow{font-size:11px;letter-spacing:2px;opacity:.8;font-weight:700}.top h1{font-size:26px;margin:7px 0 4px;font-weight:750}.top p{font-size:13px;margin:0;opacity:.9}
+main{max-width:720px;margin:auto;padding:18px 16px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:7px 0 14px}
+h2{font-size:19px;margin:0}h3{font-size:15px;margin:0 0 7px}
+.muted{color:var(--muted);font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:0 2px 8px #293d2610}
+.stat{display:flex;align-items:center;gap:11px}.emoji{width:42px;height:42px;display:grid;place-items:center;background:var(--sage);border-radius:13px;font-size:22px;flex-shrink:0}
+.stat strong{font-size:22px;display:block}.stat span{font-size:12px;color:var(--muted)}
+.primary{border:0;background:var(--green);color:white;border-radius:12px;padding:11px 14px;font-weight:650}
+.secondary{border:1px solid #cdd5c8;background:#fff;color:var(--deep);border-radius:12px;padding:10px 12px;font-weight:600}
+.danger{border:1px solid #e9c9c5;background:#fff7f5;color:var(--red);border-radius:10px;padding:7px 10px}
+.full{width:100%}.quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0 22px}
+.quick button{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px 5px;color:var(--deep);font-size:12px;font-weight:650}
+.quick b{display:block;font-size:21px;margin-bottom:4px}
+.item{display:flex;align-items:flex-start;gap:11px;padding:13px 0;border-bottom:1px solid var(--line)}.item:last-child{border-bottom:0}
+.item-main{flex:1;min-width:0}.item-title{font-weight:700;font-size:14px}.item-sub{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
+.pill{display:inline-block;padding:4px 8px;border-radius:99px;background:var(--sage);color:var(--deep);font-size:11px;margin:4px 3px 0 0}
+.pill.warn{background:#f8e9dc;color:#8b4d26}.pill.red{background:#f8e2df;color:#9c3934}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fffefaed;backdrop-filter:blur(14px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 5px calc(8px + env(safe-area-inset-bottom));z-index:10}
+.nav button{border:0;background:transparent;color:#85897f;font-size:10px;padding:4px 0}.nav button .ico{display:block;font-size:20px;margin-bottom:3px}.nav button.active{color:var(--green);font-weight:800}
+.field{margin:12px 0}.field label{display:block;font-size:12px;font-weight:700;color:#586253;margin-bottom:6px}
+.field input,.field select,.field textarea,.search{width:100%;border:1px solid #dcded5;border-radius:11px;padding:11px 12px;background:white;color:var(--ink);outline-color:var(--green)}
+.field textarea{min-height:76px;resize:vertical}.row{display:flex;gap:8px}.row>*{flex:1;min-width:0}
+form{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:15px;margin:12px 0}
+.empty{text-align:center;padding:26px 12px;color:var(--muted);font-size:13px}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.actions button{font-size:12px}
+.page{display:none}.page.active{display:block}
+.banner{padding:13px;border-radius:14px;background:#edf1e8;color:#465840;font-size:12px;line-height:1.6;margin-bottom:14px}
+.checkrow{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.checkrow input{width:18px;height:18px;accent-color:var(--green)}.checkrow.done .checktext{text-decoration:line-through;color:#90948b}
+.modalback{position:fixed;inset:0;background:#1d271d77;z-index:20;display:none;align-items:flex-end;justify-content:center;padding:12px}.modalback.show{display:flex}.modal{background:var(--cream);width:100%;max-width:600px;max-height:85vh;overflow:auto;border-radius:22px;padding:18px}
+@media(min-width:620px){main{padding:24px}.top{padding-left:max(24px,calc((100vw - 672px)/2));padding-right:max(24px,calc((100vw - 672px)/2))}.modalback{align-items:center}}
+
+.upload-box{border:1.5px dashed #aebba5;background:#f0f4ed;border-radius:15px;padding:16px;text-align:center;margin:12px 0}
+.upload-box input{max-width:100%;font-size:12px}.preview-img{width:100%;max-height:240px;object-fit:contain;background:#fff;border-radius:12px;margin-top:10px}
+.ocr-status{font-size:12px;color:var(--muted);line-height:1.6;margin:10px 0}
+.ocr-line{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(55px,.55fr) minmax(65px,.7fr);gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.ocr-line input{min-width:0;width:100%;padding:9px 7px;border:1px solid #dcded5;border-radius:9px;background:#fff;font-size:13px}
+.ocr-line .remove-line{border:0;background:#f8e2df;color:#9c3934;border-radius:8px;padding:7px 5px;font-size:11px}
+.recommend-card{background:linear-gradient(135deg,#f5f3e9,#edf2e8);border:1px solid #dfe5d8;border-radius:16px;padding:14px;margin:10px 0}
+.matchbar{height:5px;background:#dfe4da;border-radius:99px;overflow:hidden;margin:7px 0}.matchbar span{display:block;height:100%;background:var(--green);border-radius:99px}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="eyebrow">MY LITTLE KITCHEN</div><h1>我的智慧廚房</h1><p id="topline">把食材好好利用，把每天的料理變簡單。</p></header>
+<main>
+<section class="page active" id="page-home">
+ <div class="section-head"><h2>今天煮什麼？</h2><span class="muted" id="today"></span></div>
+ <div class="grid">
+  <div class="card stat"><div class="emoji">🥬</div><div><strong id="statIngredients">0</strong><span>項現有食材</span></div></div>
+  <div class="card stat"><div class="emoji">⏳</div><div><strong id="statExpiring">0</strong><span>項優先使用</span></div></div>
+ </div>
+ <div class="quick">
+  <button onclick="openForm('ingredient')"><b>＋</b>新增食材</button>
+  <button onclick="openForm('recipe')"><b>＋</b>新增食譜</button>
+  <button onclick="go('menu')"><b>▦</b>規劃菜單</button>
+ </div>
+ <div class="section-head"><h2>建議先使用</h2><button class="secondary" onclick="go('ingredients')">查看全部</button></div>
+ <div class="card" id="priorityList"></div>
+ <div class="section-head" style="margin-top:22px"><h2>今天的菜單</h2><button class="secondary" onclick="go('menu')">編輯菜單</button></div>
+ <div class="card" id="todayMenu"></div>
+ <div class="section-head" style="margin-top:22px"><h2>依庫存推薦料理</h2><button class="secondary" onclick="renderRecommendations()">重新配對</button></div>
+ <div id="recommendations"></div>
+</section>
+
+<section class="page" id="page-ingredients">
+ <div class="section-head"><h2>食材庫存</h2><div class="actions"><button class="secondary" onclick="openImport()">📷 截圖匯入</button><button class="primary" onclick="openForm('ingredient')">＋ 新增</button></div></div>
+ <input class="search" id="ingredientSearch" placeholder="搜尋食材名稱…" oninput="renderIngredients()">
+ <div class="row" style="margin:10px 0"><select class="search" id="storageFilter" onchange="renderIngredients()"><option value="">全部保存位置</option><option>冷藏</option><option>冷凍</option><option>常溫</option></select><select class="search" id="ingredientSort" onchange="renderIngredients()"><option value="expiry">依到期日排序</option><option value="name">依名稱排序</option></select></div>
+ <div class="card" id="ingredientList"></div>
+</section>
+
+<section class="page" id="page-menu">
+ <div class="section-head"><h2>每週菜單</h2><button class="primary" onclick="openForm('menu')">＋ 安排料理</button></div>
+ <div class="banner">選擇日期與餐別，從已收藏的食譜安排料理。採買清單可由菜單需求自動整理。</div>
+ <div class="card" id="menuList"></div>
+ <button class="primary full" style="margin-top:12px" onclick="makeShoppingFromMenu()">依本週菜單產生採買清單</button>
+</section>
+
+<section class="page" id="page-recipes">
+ <div class="section-head"><h2>我的食譜</h2><button class="primary" onclick="openForm('recipe')">＋ 新增</button></div>
+ <input class="search" id="recipeSearch" placeholder="搜尋食譜名稱或料理類型…" oninput="renderRecipes()">
+ <div class="card" id="recipeList" style="margin-top:12px"></div>
+</section>
+
+<section class="page" id="page-shopping">
+ <div class="section-head"><h2>採買清單</h2><button class="primary" onclick="openForm('shopping')">＋ 新增</button></div>
+ <div class="banner">勾選已買項目；購買後可將它加入食材庫存。從菜單產生的清單會先扣除目前庫存。</div>
+ <div class="card" id="shoppingList"></div>
+ <div class="actions"><button class="secondary" onclick="clearBought()">清除已勾選項目</button><button class="secondary" onclick="exportData()">匯出備份</button><button class="secondary" onclick="document.getElementById('importFile').click()">還原備份</button><input id="importFile" type="file" accept="application/json" hidden onchange="importData(event)"></div>
+</section>
+</main>
+<nav class="nav">
+ <button class="active" data-page="home" onclick="go('home')"><span class="ico">⌂</span>首頁</button>
+ <button data-page="ingredients" onclick="go('ingredients')"><span class="ico">♧</span>食材</button>
+ <button data-page="menu" onclick="go('menu')"><span class="ico">▦</span>菜單</button>
+ <button data-page="recipes" onclick="go('recipes')"><span class="ico">▤</span>食譜</button>
+ <button data-page="shopping" onclick="go('shopping')"><span class="ico">🛒</span>採買</button>
+</nav>
+<div class="modalback" id="modalback" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="section-head"><h2 id="modalTitle">新增</h2><button class="secondary" onclick="closeModal()">關閉</button></div><div id="modalBody"></div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+const KEY='my-smart-kitchen-v1';
+let db={ingredients:[],recipes:[],menus:[],shopping:[]};
+try{const saved=localStorage.getItem(KEY);if(saved)db={...db,...JSON.parse(saved)}}catch(e){}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const todayISO=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const dateAdd=(n)=>{let d=new Date();d.setDate(d.getDate()+n);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const fmtDate=s=>s?new Date(s+'T00:00:00').toLocaleDateString('zh-TW',{month:'numeric',day:'numeric'}):'未設定';
+function save(){localStorage.setItem(KEY,JSON.stringify(db));renderAll()}
+function go(p){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id==='page-'+p));document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===p));if(p==='ingredients')renderIngredients();if(p==='recipes')renderRecipes();if(p==='menu')renderMenus();if(p==='shopping')renderShopping();window.scrollTo(0,0)}
+function openForm(type,id=null){
+ const obj=id?(type==='ingredient'?db.ingredients:type==='recipe'?db.recipes:type==='menu'?db.menus:db.shopping).find(x=>x.id===id):{};
+ $('modalTitle').textContent=(id?'編輯':'新增')+({ingredient:'食材',recipe:'食譜',menu:'菜單料理',shopping:'採買項目'}[type]);
+ let body='';
+ if(type==='ingredient')body=`<form onsubmit="submitForm(event,'ingredient','${id||''}')">
+ <div class="field"><label>食材名稱 *</label><input name="name" required value="${esc(obj.name||'')}" placeholder="例如：鴻禧菇"></div>
+ <div class="row"><div class="field"><label>數量</label><input name="qty" value="${esc(obj.qty??'1')}" placeholder="例如：2"></div><div class="field"><label>單位</label><input name="unit" value="${esc(obj.unit||'份')}" placeholder="包、顆、克"></div></div>
+ <div class="row"><div class="field"><label>保存位置</label><select name="storage"><option ${obj.storage==='冷藏'?'selected':''}>冷藏</option><option ${obj.storage==='冷凍'?'selected':''}>冷凍</option><option ${obj.storage==='常溫'?'selected':''}>常溫</option></select></div><div class="field"><label>到期日</label><input type="date" name="expiry" value="${esc(obj.expiry||'')}"></div></div>
+ <div class="field"><label>備註</label><input name="note" value="${esc(obj.note||'')}" placeholder="品牌、開封狀態等"></div><button class="primary full">儲存食材</button></form>`;
+ if(type==='recipe')body=`<form onsubmit="submitForm(event,'recipe','${id||''}')">
+ <div class="field"><label>食譜名稱 *</label><input name="name" required value="${esc(obj.name||'')}" placeholder="例如：番茄炒蛋"></div>
+ <div class="row"><div class="field"><label>料理類型</label><select name="category"><option ${obj.category==='蔬菜'?'selected':''}>蔬菜</option><option ${obj.category==='蛋料理'?'selected':''}>蛋料理</option><option ${obj.category==='豆製品'?'selected':''}>豆製品</option><option ${obj.category==='主食'?'selected':''}>主食</option><option ${obj.category==='湯品'?'selected':''}>湯品</option><option ${obj.category==='其他'?'selected':''}>其他</option></select></div><div class="field"><label>總時間（分鐘）</label><input type="number" min="1" name="minutes" value="${esc(obj.minutes||20)}"></div></div>
+ <div class="field"><label>食材與用量（每行一項）</label><textarea name="ingredients" placeholder="番茄 2 顆&#10;雞蛋 2 顆&#10;油 1 小匙">${esc(obj.ingredients||'')}</textarea></div>
+ <div class="field"><label>調味料</label><input name="seasoning" value="${esc(obj.seasoning||'')}" placeholder="鹽、胡椒等"></div>
+ <div class="field"><label>烹調步驟</label><textarea name="steps" placeholder="1. 備料&#10;2. 下鍋拌炒">${esc(obj.steps||'')}</textarea></div>
+ <div class="field"><label>備註</label><input name="note" value="${esc(obj.note||'')}"></div><button class="primary full">儲存食譜</button></form>`;
+ if(type==='menu')body=`<form onsubmit="submitForm(event,'menu','${id||''}')">
+ <div class="field"><label>日期 *</label><input type="date" name="date" required value="${esc(obj.date||todayISO())}"></div>
+ <div class="field"><label>餐別</label><select name="meal"><option ${obj.meal==='午餐'?'selected':''}>午餐</option><option ${obj.meal==='晚餐'?'selected':''}>晚餐</option></select></div>
+ <div class="field"><label>選擇食譜</label><select name="recipeId"><option value="">手動輸入料理</option>${db.recipes.map(r=>`<option value="${r.id}" ${obj.recipeId===r.id?'selected':''}>${esc(r.name)}</option>`).join('')}</select></div>
+ <div class="field"><label>料理名稱 *</label><input name="name" required value="${esc(obj.name||'')}" placeholder="例如：香煎豆腐"></div><button class="primary full">儲存菜單</button></form>`;
+ if(type==='shopping')body=`<form onsubmit="submitForm(event,'shopping','${id||''}')">
+ <div class="field"><label>採買項目 *</label><input name="name" required value="${esc(obj.name||'')}" placeholder="例如：雞蛋"></div>
+ <div class="row"><div class="field"><label>數量</label><input name="qty" value="${esc(obj.qty||'1')}"></div><div class="field"><label>單位</label><input name="unit" value="${esc(obj.unit||'份')}"></div></div><button class="primary full">儲存項目</button></form>`;
+ $('modalBody').innerHTML=body;$('modalback').classList.add('show');
+}
+function closeModal(){$('modalback').classList.remove('show')}
+function submitForm(e,type,id){e.preventDefault();let f=new FormData(e.target),o=Object.fromEntries(f.entries());let arr=type==='ingredient'?db.ingredients:type==='recipe'?db.recipes:type==='menu'?db.menus:db.shopping;
+ if(type==='menu'&&o.recipeId){let r=db.recipes.find(x=>x.id===o.recipeId);if(r)o.name=r.name}
+ if(type==='shopping'){o.bought=false;o.source='manual'}
+ if(id){let i=arr.findIndex(x=>x.id===id);if(i>=0)arr[i]={...arr[i],...o}}
+ else arr.unshift({id:uid(),...o,created:todayISO()});
+ closeModal();save();
+}
+function daysLeft(s){if(!s)return null;return Math.ceil((new Date(s+'T00:00:00')-new Date(todayISO()+'T00:00:00'))/86400000)}
+function expiryBadge(x){let d=daysLeft(x.expiry);if(d===null)return '<span class="pill">未設定到期日</span>';if(d<0)return '<span class="pill red">已過期</span>';if(d<=3)return `<span class="pill warn">${d===0?'今天到期':`剩 ${d} 天`}</span>`;return `<span class="pill">到期 ${fmtDate(x.expiry)}</span>`}
+function renderIngredients(){let q=($('ingredientSearch')?.value||'').trim().toLowerCase(),st=$('storageFilter')?.value||'',sort=$('ingredientSort')?.value||'expiry';let a=db.ingredients.filter(x=>x.name.toLowerCase().includes(q)&&(!st||x.storage===st));a.sort((x,y)=>sort==='name'?x.name.localeCompare(y.name,'zh-Hant'):(x.expiry||'9999').localeCompare(y.expiry||'9999'));$('ingredientList').innerHTML=a.length?a.map(x=>`<div class="item"><div class="emoji">🥬</div><div class="item-main"><div class="item-title">${esc(x.name)} <span class="muted">${esc(x.qty||'')} ${esc(x.unit||'')}</span></div><div class="item-sub">${esc(x.storage||'未分類')} · ${x.note?esc(x.note)+' · ':''}${expiryBadge(x)}</div><div class="actions"><button class="secondary" onclick="openForm('ingredient','${x.id}')">編輯</button><button class="secondary" onclick="useIngredient('${x.id}')">用完／扣量</button><button class="danger" onclick="delItem('ingredients','${x.id}')">刪除</button></div></div></div>`).join(''):'<div class="empty">還沒有食材，先新增冰箱裡的食材吧。</div>'}
+function renderRecipes(){let q=($('recipeSearch')?.value||'').trim().toLowerCase();let a=db.recipes.filter(x=>(x.name+' '+(x.category||'')).toLowerCase().includes(q));$('recipeList').innerHTML=a.length?a.map(x=>`<div class="item"><div class="emoji">🍲</div><div class="item-main"><div class="item-title">${esc(x.name)}</div><div class="item-sub">${esc(x.category||'其他')} · 約 ${esc(x.minutes||20)} 分鐘<br>${(x.ingredients||'').split('\n').filter(Boolean).map(esc).join('、')||'尚未填寫食材'}</div><div class="actions"><button class="secondary" onclick="viewRecipe('${x.id}')">看步驟</button><button class="secondary" onclick="openForm('recipe','${x.id}')">編輯</button><button class="secondary" onclick="openForm('menu');setTimeout(()=>{let f=document.querySelector('#modalBody form');if(f){f.elements.recipeId.value='${x.id}';f.elements.name.value='${esc(x.name)}'}},30)">排入菜單</button><button class="danger" onclick="delItem('recipes','${x.id}')">刪除</button></div></div></div>`).join(''):'<div class="empty">尚未收藏食譜，新增第一道常做料理吧。</div>'}
+function viewRecipe(id){let x=db.recipes.find(r=>r.id===id);if(!x)return;$('modalTitle').textContent=x.name;$('modalBody').innerHTML=`<div class="card"><p><b>食材</b><br>${esc(x.ingredients||'尚未填寫').replace(/\n/g,'<br>')}</p><p><b>調味料</b><br>${esc(x.seasoning||'未設定')}</p><p><b>步驟</b><br>${esc(x.steps||'尚未填寫').replace(/\n/g,'<br>')}</p><p class="muted">約 ${esc(x.minutes||20)} 分鐘</p></div><button class="primary full" style="margin-top:12px" onclick="closeModal();openForm('menu');setTimeout(()=>{let f=document.querySelector('#modalBody form');if(f){f.elements.recipeId.value='${x.id}';f.elements.name.value='${esc(x.name)}'}},30)">排入菜單</button>`;$('modalback').classList.add('show')}
+function renderMenus(){let a=[...db.menus].sort((x,y)=>(x.date||'').localeCompare(y.date||'')||(x.meal||'').localeCompare(y.meal||''));$('menuList').innerHTML=a.length?a.map(x=>`<div class="item"><div class="emoji">${x.meal==='午餐'?'☀️':'🌙'}</div><div class="item-main"><div class="item-title">${fmtDate(x.date)} · ${esc(x.meal)}｜${esc(x.name)}</div><div class="item-sub">${x.date<todayISO()?'已過日期':x.date===todayISO()?'今天':'預定料理'}</div><div class="actions"><button class="secondary" onclick="openForm('menu','${x.id}')">編輯</button><button class="danger" onclick="delItem('menus','${x.id}')">刪除</button></div></div></div>`).join(''):'<div class="empty">還沒有安排菜單。按「安排料理」開始規劃。</div>'}
+function renderShopping(){let a=db.shopping;$('shoppingList').innerHTML=a.length?a.map(x=>`<label class="checkrow ${x.bought?'done':''}"><input type="checkbox" ${x.bought?'checked':''} onchange="toggleBought('${x.id}',this.checked)"><span class="checktext" style="flex:1"><b>${esc(x.name)}</b><span class="muted">　${esc(x.qty||'')} ${esc(x.unit||'')}</span>${x.source==='menu'?'<span class="pill">菜單需求</span>':''}</span><button type="button" class="secondary" onclick="event.preventDefault();openForm('shopping','${x.id}')">編輯</button><button type="button" class="danger" onclick="event.preventDefault();delItem('shopping','${x.id}')">刪除</button></label>`).join(''):'<div class="empty">清單是空的。可以手動新增，或從每週菜單產生。</div>'}
+function renderHome(){let active=db.ingredients;let pri=active.filter(x=>x.expiry&&daysLeft(x.expiry)<=3).sort((a,b)=>(a.expiry||'').localeCompare(b.expiry||''));$('statIngredients').textContent=active.length;$('statExpiring').textContent=pri.length;$('priorityList').innerHTML=pri.length?pri.slice(0,5).map(x=>`<div class="item"><div class="emoji">⏳</div><div class="item-main"><div class="item-title">${esc(x.name)}</div><div class="item-sub">${esc(x.qty||'')} ${esc(x.unit||'')} · ${expiryBadge(x)}</div></div></div>`).join(''):'<div class="empty">目前沒有設定為近期到期的食材。</div>';let t=db.menus.filter(x=>x.date===todayISO()).sort((a,b)=>(a.meal||'').localeCompare(b.meal||''));$('todayMenu').innerHTML=t.length?t.map(x=>`<div class="item"><div class="emoji">${x.meal==='午餐'?'☀️':'🌙'}</div><div class="item-main"><div class="item-title">${esc(x.meal)}｜${esc(x.name)}</div></div></div>`).join(''):'<div class="empty">今天還沒安排料理，去菜單頁新增吧。</div>'}
+
+let ocrDraft=[];
+function openImport(){
+ $('modalTitle').textContent='截圖匯入食材';
+ $('modalBody').innerHTML=`<div class="banner">上傳購物訂單截圖後，App 會嘗試在你的瀏覽器內辨識文字。辨識結果可能有錯，加入庫存前請逐項確認。OCR 引擎與繁體中文語言資料需由網路載入。</div>
+ <div class="upload-box"><div style="font-size:28px">📷</div><b>選擇購物訂單截圖</b><p class="muted">支援 JPG、PNG、WebP</p><input id="orderImage" type="file" accept="image/*" onchange="previewOrderImage(event)"><img id="orderPreview" class="preview-img" hidden></div>
+ <button class="primary full" id="runOcrBtn" onclick="runOrderOCR()" disabled>辨識訂單文字</button><div id="ocrStatus" class="ocr-status">請先選擇一張訂單截圖。</div><div id="ocrResults"></div>`;
+ $('modalback').classList.add('show');ocrDraft=[];
+}
+function previewOrderImage(e){
+ const file=e.target.files&&e.target.files[0];if(!file)return;
+ if(!file.type.startsWith('image/')){alert('請選擇圖片檔。');return}
+ const img=$('orderPreview');img.src=URL.createObjectURL(file);img.hidden=false;
+ $('runOcrBtn').disabled=false;$('ocrStatus').textContent='圖片已載入。點選「辨識訂單文字」開始辨識。';
+}
+function parseOrderText(text){
+ const lines=text.split(/\r?\n/).map(s=>s.replace(/[|｜]/g,' ').replace(/\s+/g,' ').trim()).filter(s=>s.length>=2);
+ const skip=/^(訂單|訂購|購物車|商品名稱|品名|數量|小計|總計|合計|折扣|優惠|運費|付款|配送|收件|地址|訂單編號|訂單日期|發票|已付款|待付款|商品明細|明細|結帳|會員|店家|全選|刪除|共\d+項|訂單成立|訂單完成)/;
+ const result=[];
+ for(let line of lines){
+   if(skip.test(line)||/https?:|www\.|電話|手機|信用卡|末四碼/.test(line))continue;
+   let qty='1',unit='份',name=line;
+   let m=line.match(/(?:[xX×＊*]\s*(\d+(?:\.\d+)?)|(\d+(?:\.\d+)?)\s*[xX×＊*])\s*$/);
+   if(m){qty=m[1]||m[2];name=line.slice(0,m.index).trim()}
+   else {
+     m=line.match(/(?:數量\s*[:：]?\s*)?(\d+(?:\.\d+)?)\s*(包|盒|袋|瓶|罐|顆|個|份|組|入|公斤|kg|g|公克|克|ml|毫升)\s*$/i);
+     if(m){qty=m[1];unit=m[2];name=line.slice(0,m.index).trim()}
+     else {m=line.match(/\s+(\d+)\s*$/);if(m&&line.length>m[0].length+1){qty=m[1];name=line.slice(0,m.index).trim()}}
+   }
+   name=name.replace(/^[•·\-–—\d.)、\s]+/,'').replace(/\s+(NT\$|＄|\$)\s?[\d,.]+.*$/i,'').replace(/\s+[$＄]?\s?[\d,.]+\s*(元|NTD|NT\$)?$/i,'').trim();
+   name=name.replace(/\s*(已售完|缺貨|折價|特價|促銷|免運).*$/,'').trim();
+   if(name.length<2||/^\d+$/.test(name)||/^(NT\$|價格|單價|金額|數量)$/.test(name))continue;
+   if(!result.some(x=>x.name===name))result.push({name,qty,unit});
+ }
+ return result;
+}
+async function runOrderOCR(){
+ const file=$('orderImage')?.files?.[0];if(!file)return;
+ if(!window.Tesseract){$('ocrStatus').textContent='OCR 引擎尚未載入。請確認網路連線後重新整理頁面。';return}
+ const btn=$('runOcrBtn');btn.disabled=true;btn.textContent='辨識中…';
+ $('ocrStatus').textContent='正在載入繁體中文與英文辨識資料，第一次可能需要一些時間。';
+ try{
+   const worker=await Tesseract.createWorker('chi_tra+eng',1,{logger:m=>{if(m.status)$('ocrStatus').textContent='辨識中：'+m.status+(m.progress!==undefined?' '+Math.round(m.progress*100)+'%':'')}});
+   const result=await worker.recognize(file);await worker.terminate();
+   ocrDraft=parseOrderText(result.data.text||'');
+   $('ocrStatus').textContent=ocrDraft.length?`辨識完成，整理出 ${ocrDraft.length} 個可能品項。請逐項確認名稱、數量與單位；OCR 可能把價格或規格誤認成數量。`:'沒有辨識出明確品項。請試著裁切圖片，只保留商品名稱與數量，或手動新增。';
+   renderOCRDraft();
+ }catch(err){$('ocrStatus').textContent='辨識失敗。請確認網路連線，或改用較清楚、文字較大的訂單截圖。'}
+ finally{btn.disabled=false;btn.textContent='重新辨識訂單文字'}
+}
+function renderOCRDraft(){
+ const box=$('ocrResults');if(!box)return;
+ if(!ocrDraft.length){box.innerHTML='<div class="empty">目前沒有待確認項目。</div>';return}
+ box.innerHTML=`<h3 style="margin-top:18px">確認辨識結果</h3><div class="muted">名稱、數量、單位都可以修改。請刪除誤辨識的價格、促銷字樣或非食材項目。</div><div style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(55px,.55fr) minmax(65px,.7fr);gap:6px;margin-top:10px;font-size:11px;color:var(--muted)"><span>食材名稱</span><span>數量</span><span>單位</span></div>
+ ${ocrDraft.map((x,i)=>`<div class="ocr-line"><input aria-label="食材名稱" value="${esc(x.name)}" onchange="ocrDraft[${i}].name=this.value"><input aria-label="數量" value="${esc(x.qty)}" onchange="ocrDraft[${i}].qty=this.value"><div style="display:flex;gap:3px"><input aria-label="單位" value="${esc(x.unit)}" onchange="ocrDraft[${i}].unit=this.value"><button class="remove-line" onclick="ocrDraft.splice(${i},1);renderOCRDraft()">×</button></div></div>`).join('')}
+ <div class="field"><label>預設保存位置（可之後逐項修改）</label><select id="ocrStorage"><option>冷藏</option><option>冷凍</option><option>常溫</option></select></div>
+ <button class="primary full" onclick="commitOCRDraft()">確認並加入食材庫存（${ocrDraft.length} 項）</button>`;
+}
+function commitOCRDraft(){
+ const storage=$('ocrStorage')?.value||'冷藏';
+ const clean=ocrDraft.filter(x=>x.name.trim()).map(x=>({...x,id:uid(),name:x.name.trim(),qty:x.qty||'1',unit:x.unit||'份',storage,expiry:'',note:'由購物訂單截圖匯入',created:todayISO()}));
+ if(!clean.length){alert('沒有可加入的食材。');return}
+ let added=0;
+ clean.forEach(x=>{const existing=db.ingredients.find(y=>y.name.trim()===x.name);if(existing&&confirm(`庫存已有「${x.name}」，要把數量加到現有庫存嗎？`)){let a=Number(existing.qty),b=Number(x.qty);if(Number.isFinite(a)&&Number.isFinite(b))existing.qty=String(a+b);else existing.qty=x.qty;existing.unit=x.unit||existing.unit;existing.note=existing.note||x.note}else{db.ingredients.unshift(x);added++}});
+ closeModal();save();go('ingredients');alert(`匯入處理完成。新增 ${added} 項；請再補上各食材的到期日。`);
+}
+function renderRecommendations(){
+ const box=$('recommendations');if(!box)return;
+ if(!db.recipes.length){box.innerHTML='<div class="card empty">先在「食譜」新增幾道常做料理，之後就能依現有庫存配對。</div>';return}
+ const inv=db.ingredients.map(x=>x.name.toLowerCase());
+ const recs=db.recipes.map(r=>{
+   const lines=(r.ingredients||'').split(/\n|、|，|,/).map(s=>s.trim()).filter(Boolean);
+   const names=lines.map(s=>s.replace(/[0-9０-９.．½¼\/\s]*(包|盒|袋|瓶|罐|顆|個|份|組|入|公斤|kg|g|公克|克|ml|毫升|大匙|小匙)?$/i,'').trim()).filter(s=>s.length>=2);
+   const matched=names.filter(n=>inv.some(i=>i.includes(n.toLowerCase())||n.toLowerCase().includes(i)));
+   const missing=names.filter(n=>!matched.includes(n));
+   return {...r,matched,missing,score:names.length?Math.round(matched.length/names.length*100):0};
+ }).filter(r=>r.score>0).sort((a,b)=>b.score-a.score).slice(0,4);
+ box.innerHTML=recs.length?recs.map(r=>`<div class="recommend-card"><div style="display:flex;justify-content:space-between;gap:8px;align-items:start"><div><h3>${esc(r.name)}</h3><div class="muted">約 ${esc(r.minutes||20)} 分鐘 · ${esc(r.category||'其他')}</div></div><span class="pill">${r.score}% 食材符合</span></div><div class="matchbar"><span style="width:${r.score}%"></span></div><div class="item-sub">已有：${r.matched.map(esc).join('、')||'無'}<br>可能缺少：${r.missing.map(esc).join('、')||'依食譜紀錄已具備'}</div><div class="actions"><button class="secondary" onclick="viewRecipe('${r.id}')">查看食譜</button><button class="primary" onclick="addMissingToShopping('${r.id}')">缺少食材加入採買</button></div></div>`).join(''):'<div class="card empty">目前沒有食譜能與庫存配對。請先新增食譜，並在食譜中逐行填寫食材名稱與用量。</div>';
+}
+function addMissingToShopping(id){
+ const r=db.recipes.find(x=>x.id===id);if(!r)return;
+ const lines=(r.ingredients||'').split(/\n|、|，|,/).map(s=>s.trim()).filter(Boolean);let added=0;
+ lines.forEach(line=>{let name=line.replace(/[0-9０-９.．½¼\/\s]*(包|盒|袋|瓶|罐|顆|個|份|組|入|公斤|kg|g|公克|克|ml|毫升|大匙|小匙)?$/i,'').trim();if(name.length<2)return;const have=db.ingredients.some(i=>i.name.toLowerCase().includes(name.toLowerCase())||name.toLowerCase().includes(i.name.toLowerCase()));const exists=db.shopping.some(i=>i.name===name&&!i.bought);if(!have&&!exists){db.shopping.unshift({id:uid(),name,qty:'1',unit:'份',bought:false,source:'recipe'});added++}});
+ save();go('shopping');alert(added?`已加入 ${added} 項可能缺少的食材。請確認份量。`:'沒有新增項目；可能食材已在庫存或採買清單中。');
+}
+
+function renderAll(){renderHome();renderIngredients();renderRecipes();renderMenus();renderShopping();renderRecommendations()}
+function delItem(key,id){if(!confirm('確定要刪除這筆資料？'))return;db[key]=db[key].filter(x=>x.id!==id);save()}
+function useIngredient(id){let x=db.ingredients.find(x=>x.id===id);if(!x)return;let q=prompt(`「${x.name}」目前數量 ${x.qty||'未設定'} ${x.unit||''}。\n輸入剩餘數量；輸入 0 代表用完。`,x.qty||'0');if(q===null)return;if(q.trim()===''||!isFinite(Number(q))||Number(q)<0){alert('請輸入 0 或正確的數量。');return}if(Number(q)===0)db.ingredients=db.ingredients.filter(y=>y.id!==id);else x.qty=q;save()}
+function toggleBought(id,val){let x=db.shopping.find(x=>x.id===id);if(!x)return;x.bought=val;if(val&&confirm(`要將「${x.name}」加入食材庫存嗎？`)){db.ingredients.unshift({id:uid(),name:x.name,qty:x.qty||'1',unit:x.unit||'份',storage:'常溫',expiry:'',note:'由採買清單加入',created:todayISO()})}save()}
+function clearBought(){db.shopping=db.shopping.filter(x=>!x.bought);save()}
+function makeShoppingFromMenu(){let menus=db.menus.filter(m=>m.date>=todayISO()),needed={};menus.forEach(m=>{let r=db.recipes.find(r=>r.id===m.recipeId);if(!r||!r.ingredients)return;r.ingredients.split('\n').map(s=>s.trim()).filter(Boolean).forEach(line=>{let name=line.split(/[ x×*]/)[0].trim();if(name)needed[name]=(needed[name]||0)+1})});let added=0;Object.keys(needed).forEach(name=>{let have=db.ingredients.some(i=>i.name.includes(name)||name.includes(i.name));let exists=db.shopping.some(i=>i.name===name&&!i.bought);if(!have&&!exists){db.shopping.unshift({id:uid(),name,qty:String(needed[name]),unit:'份',bought:false,source:'menu'});added++}});save();go('shopping');alert(added?`已新增 ${added} 項待採買食材。請檢查數量並依實際份量調整。`:'沒有新增項目。請確認菜單已連結食譜，且缺少的食材未在庫存或清單中。')}
+function exportData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='我的智慧廚房備份-'+todayISO()+'.json';a.click();URL.revokeObjectURL(a.href)}
+function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!d||!Array.isArray(d.ingredients)||!Array.isArray(d.recipes))throw Error();if(!confirm('還原備份會以檔案內容取代目前資料，確定繼續？'))return;db={ingredients:[],recipes:[],menus:[],shopping:[],...d};save();alert('備份還原完成。')}catch(err){alert('檔案格式不正確，無法還原。')}e.target.value=''};r.readAsText(f)}
+$('today').textContent=new Date().toLocaleDateString('zh-TW',{month:'long',day:'numeric',weekday:'short'});
+renderAll();
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body>
+</html>
