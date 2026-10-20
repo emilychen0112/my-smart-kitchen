@@ -1,0 +1,10 @@
+{
+  "name": "我的智慧廚房",
+  "short_name": "智慧廚房",
+  "lang": "zh-Hant",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f8f6f0",
+  "theme_color": "#687b62",
+  "description": "個人食材、食譜、菜單與採買管理"
+}
